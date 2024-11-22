@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // import google fonts
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wave_education/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,7 +52,7 @@ class MyHomePage extends StatelessWidget {
           child: AppBar(
             backgroundColor: const Color(0xFFDFE9FF),
             title: Container(
-              margin: EdgeInsets.fromLTRB(10, 20, 0, 0),
+              margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
               width: 200,
               child: Image.asset(
                 "assets/images/logo.png",
@@ -61,7 +60,7 @@ class MyHomePage extends StatelessWidget {
             ),
             actions: [
               Container(
-                margin: EdgeInsets.fromLTRB(0, 8, 60, 0),
+                margin: const EdgeInsets.fromLTRB(0, 8, 60, 0),
                 child: Row(
                   children: [
                     TextButton(
@@ -69,7 +68,7 @@ class MyHomePage extends StatelessWidget {
                       child: Text(
                         "Dashboard",
                         style: GoogleFonts.poppins(
-                          color: Color(0xFF5B5B5B),
+                          color: const Color(0xFF5B5B5B),
                         ),
                       ),
                     ),
@@ -92,7 +91,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                     ),
                     // Foto profile
-                    SizedBox(width: 30),
+                    const SizedBox(width: 30),
                     Row(
                       children: [
                         Container(
@@ -106,7 +105,7 @@ class MyHomePage extends StatelessWidget {
                                       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
                                   fit: BoxFit.cover),
                             )),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -117,9 +116,9 @@ class MyHomePage extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(width: 5),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 1, 0, 0),
-                              child: const Icon(
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 1, 0, 0),
+                              child: Icon(
                                 size: 15,
                                 Icons.keyboard_arrow_down,
                                 color: Colors.black,
@@ -139,7 +138,7 @@ class MyHomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(50.0),
             child: Center(
-              child: Container(
+              child: SizedBox(
                 height: 8000,
                 width: MediaQuery.of(context).size.width,
                 // color: Colors.red,
@@ -151,7 +150,7 @@ class MyHomePage extends StatelessWidget {
                       style: GoogleFonts.poppins(
                           fontSize: 30, fontWeight: FontWeight.w700),
                     ),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     Center(
                       child: Container(
                         // border radius
@@ -171,9 +170,9 @@ class MyHomePage extends StatelessWidget {
                                     style: GoogleFonts.poppins(
                                       fontSize: 30,
                                       fontWeight: FontWeight.w700,
-                                      color: Color(0xFF4366DE),
+                                      color: const Color(0xFF4366DE),
                                     )),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text(
                                     "JavaScript (JS) menduduki posisi teratas dengan 62.3% pengguna, menjadikannya bahasa pemrograman paling banyak digunakan.\n\n HTML/CSS mengikuti dengan 52.9%, yang mendukung pengembangan front-end dan desain web.",
                                     style: GoogleFonts.poppins(fontSize: 21)),
@@ -181,7 +180,7 @@ class MyHomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Align(
                       alignment: Alignment.bottomRight,
                       child:

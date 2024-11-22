@@ -10,7 +10,7 @@ class DashboardPage extends StatelessWidget {
         height: 8000,
         width: 20,
         color: Colors.red,
-        margin: EdgeInsets.symmetric(vertical: 30),
+        margin: const EdgeInsets.symmetric(vertical: 30),
       ),
     );
   }
