@@ -18,11 +18,17 @@ class MyApp extends StatelessWidget {
         path: "/login",
         name: 'login',
         builder: (context, state) => const LoginPage(),
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: LoginPage(),
+        ),
       ),
       GoRoute(
         path: "/signup",
         name: 'signup',
         builder: (context, state) => const SignupPage(),
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: SignupPage(),
+        ),
       ),
       GoRoute(
         path: "/dashboard",
