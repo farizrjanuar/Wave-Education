@@ -1,87 +1,97 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:go_router/go_router.dart';
+
 class CoursesCard extends StatelessWidget {
+  // final String courseName;
   const CoursesCard({
+    // required this.courseName,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          // elevation
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 6,
-                blurRadius: 7,
-                offset: const Offset(0, 3))
-          ],
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.white),
-      width: 350,
-      height: 400,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                height: 900,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
-                      fit: BoxFit.cover),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Pemrograman Web",
-              style: GoogleFonts.poppins(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Lorem ipsum dolor sit amet, consectetur adipising elit, sed do eiusmod tempor",
-              style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 10),
-            ListTile(
-              contentPadding: const EdgeInsets.all(0),
-              leading: Container(
-                  // margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  width: 35,
-                  // height: 45,
+    return GestureDetector(
+      onTap: () {
+        context.goNamed("courseDetail");
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            // elevation
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 6,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3))
+            ],
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.white),
+        width: 350,
+        height: 400,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  height: 900,
                   decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                     image: DecorationImage(
                         image: NetworkImage(
                             "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
                         fit: BoxFit.cover),
-                  )),
-              title: Text("Ghefin", style: GoogleFonts.poppins(fontSize: 12)),
-            ),
-            const SizedBox(height: 10),
-            LinearProgressIndicator(
-              value: 0.5, // Nilai progress (0.0 hingga 1.0)
-              backgroundColor: Colors.grey[300], // Warna latar belakang
-              color: const Color(0xFF49BBBD), // Warna progress
-              minHeight: 4, // Tinggi bar
-            ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text("50% Kursus telah selesai",
-                  style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey)),
-            ),
-          ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Pemrograman Web",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Lorem ipsum dolor sit amet, consectetur adipising elit, sed do eiusmod tempor",
+                style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
+              ),
+              const SizedBox(height: 10),
+              ListTile(
+                contentPadding: const EdgeInsets.all(0),
+                leading: Container(
+                    // margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    width: 35,
+                    // height: 45,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: NetworkImage(
+                              "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
+                          fit: BoxFit.cover),
+                    )),
+                title: Text("Ghefin", style: GoogleFonts.poppins(fontSize: 12)),
+              ),
+              const SizedBox(height: 10),
+              LinearProgressIndicator(
+                value: 0.5, // Nilai progress (0.0 hingga 1.0)
+                backgroundColor: Colors.grey[300], // Warna latar belakang
+                color: const Color(0xFF49BBBD), // Warna progress
+                minHeight: 4, // Tinggi bar
+              ),
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text("50% Kursus telah selesai",
+                    style:
+                        GoogleFonts.poppins(fontSize: 12, color: Colors.grey)),
+              ),
+            ],
+          ),
         ),
       ),
     );
