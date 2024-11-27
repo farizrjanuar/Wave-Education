@@ -41,7 +41,7 @@ class FormAuthSignIn extends StatelessWidget {
                     // const Spacer(),
                     Image.asset(
                       "assets/images/logo.png",
-                      width: 100,
+                      width: 110,
                     ),
                   ],
                 ),
