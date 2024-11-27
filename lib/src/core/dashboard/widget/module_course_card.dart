@@ -62,7 +62,10 @@ class ModuleCourseCard extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   "Lorem ipsum dolor sit amet, consectetur adipising elit, sed do eiusmod tempor",
-                  style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 ListTile(
@@ -74,9 +77,10 @@ class ModuleCourseCard extends StatelessWidget {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                          image: NetworkImage(
-                              "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
-                          fit: BoxFit.cover),
+                        image: NetworkImage(
+                            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   title: Text(

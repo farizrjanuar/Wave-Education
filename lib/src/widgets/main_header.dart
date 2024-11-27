@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 
 class MainHeader extends StatelessWidget {
   const MainHeader({
@@ -9,10 +10,11 @@ class MainHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: const Color(0xFFDFE9FF),
       title: Container(
-        margin: const EdgeInsets.fromLTRB(10, 20, 0, 0),
-        width: 200,
+        margin: const EdgeInsets.fromLTRB(10, 15, 0, 0),
+        width: 180,
         child: Image.asset(
           "assets/images/logo.png",
         ),
@@ -23,7 +25,9 @@ class MainHeader extends StatelessWidget {
           child: Row(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.goNamed("dashboard");
+                },
                 child: Text(
                   "Dashboard",
                   style: GoogleFonts.poppins(
@@ -32,7 +36,9 @@ class MainHeader extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.goNamed("courses");
+                },
                 child: Text(
                   "Course",
                   style: GoogleFonts.poppins(

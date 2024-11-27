@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wave_education/data/dummyCourse.dart';
 import 'package:wave_education/src/core/dashboard/widget/course_card.dart';
 import 'package:wave_education/src/core/dashboard/widget/module_course_card.dart';
 import 'package:wave_education/src/widgets/main_footer.dart';
@@ -10,6 +13,11 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Map<String, dynamic> data = jsonDecode(dummyCourse);
+    // List<dynamic> courses = data['courses'];
+    // List<String> courseNames =
+    //     courses.map((course) => course['course_id'] as String).toList();
+
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
@@ -94,6 +102,11 @@ class SectionCourseDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Map<String, dynamic> data = jsonDecode(dummyCourse);
+    // List<dynamic> courses = data['courses'];
+    // List<String> courseNames =
+    //     courses.map((course) => course['course_name'] as String).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
