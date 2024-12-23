@@ -57,40 +57,37 @@ class MainHeader extends StatelessWidget {
               ),
               // Foto profile
               const SizedBox(width: 30),
-              Row(
-                children: [
-                  Container(
-                      // margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      width: 35,
-                      // height: 45,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
-                            fit: BoxFit.cover),
-                      )),
-                  const SizedBox(width: 15),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Ghefin",
-                        style: GoogleFonts.poppins(
-                            color: Colors.black, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(width: 5),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 1, 0, 0),
-                        child: Icon(
-                          size: 15,
-                          Icons.keyboard_arrow_down,
-                          color: Colors.black,
+              GestureDetector(
+                onTap: () {
+                  context.goNamed("profile");
+                },
+                child: Row(
+                  children: [
+                    Container(
+                        // margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        width: 35,
+                        // height: 45,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
+                              fit: BoxFit.cover),
+                        )),
+                    const SizedBox(width: 15),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Ghefin",
+                          style: GoogleFonts.poppins(
+                              color: Colors.black, fontWeight: FontWeight.w500),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(width: 5),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
