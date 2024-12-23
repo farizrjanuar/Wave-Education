@@ -5,7 +5,13 @@ import 'package:wave_education/src/widgets/main_footer.dart';
 import 'package:wave_education/src/widgets/main_header.dart';
 
 class ModuleDetailPage extends StatelessWidget {
-  const ModuleDetailPage({super.key});
+  final String courseName;
+  final String moduleName;
+  const ModuleDetailPage({
+    required this.courseName,
+    required this.moduleName,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

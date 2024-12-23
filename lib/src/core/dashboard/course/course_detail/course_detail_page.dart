@@ -1,14 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wave_education/data/dummyCourse.dart';
 import 'package:wave_education/src/widgets/main_footer.dart';
 import 'package:wave_education/src/widgets/main_header.dart';
 import 'package:go_router/go_router.dart';
 
 class CourseDetailPage extends StatelessWidget {
-  const CourseDetailPage({super.key});
+  final String courseName;
+  const CourseDetailPage({
+    required this.courseName,
+    super.key,
+  });
+
+  Future<List<dynamic>> loadModules(String courseName) {
+    final List<dynamic> courses = jsonDecode(dataJson);
+    final course =
+        courses.firstWhere((course) => course['courseName'] == courseName);
+    print(course);
+    return course['module'];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<dynamic> courses = jsonDecode(dataJson);
+    final course =
+        courses.firstWhere((course) => course['courseName'] == courseName);
+    print(course['modules']);
+
+    // print(modules);
     double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: const PreferredSize(
@@ -40,9 +61,20 @@ class CourseDetailPage extends StatelessWidget {
                           fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(height: 50),
-                    const ModulesContent(),
-                    const ModulesContent(),
-                    const ModulesContent(),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+
+                      itemCount: course['modules']
+                          .length, // Jumlah total item yang akan ditampilkan
+                      itemBuilder: (BuildContext context, int index) {
+                        // Membangun setiap item berdasarkan index
+                        return ModulesContent(
+                          courseName: courseName,
+                          modulePath: course['modules'][index]['moduleName'],
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -56,7 +88,11 @@ class CourseDetailPage extends StatelessWidget {
 }
 
 class ModulesContent extends StatelessWidget {
+  final String courseName;
+  final String modulePath;
   const ModulesContent({
+    required this.courseName,
+    required this.modulePath,
     super.key,
   });
 
@@ -64,7 +100,13 @@ class ModulesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed("modules");
+        context.goNamed(
+          "module",
+          pathParameters: {
+            "courseName": courseName,
+            "moduleName": modulePath,
+          },
+        );
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
@@ -85,7 +127,7 @@ class ModulesContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Modul A",
+              modulePath,
               style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 30,

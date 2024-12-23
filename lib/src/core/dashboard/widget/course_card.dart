@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 
 class CoursesCard extends StatelessWidget {
-  // final String courseName;
+  final String path;
   const CoursesCard({
-    // required this.courseName,
+    required this.path,
     super.key,
   });
 
@@ -14,7 +14,7 @@ class CoursesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed("courseDetail");
+        context.goNamed("DBCourse", pathParameters: {"courseName": path});
       },
       child: Container(
         decoration: BoxDecoration(
@@ -49,7 +49,7 @@ class CoursesCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                "Pemrograman Web",
+                path,
                 style: GoogleFonts.poppins(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
