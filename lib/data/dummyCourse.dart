@@ -19,5 +19,108 @@ String dataJson = '''[
       { "moduleName": "ml", "quiz": "quiz3" },
       { "moduleName": "dl", "quiz": "quiz4" }
     ]
-  }
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+
+  {
+    "courseName": "Artificial Intelligence",
+    "modules": [
+      { "moduleName": "ml", "quiz": "quiz3" },
+      { "moduleName": "dl", "quiz": "quiz4" }
+    ]
+  },
+
 ]''';

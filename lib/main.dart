@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import google fonts
-import 'package:wave_education/src/core/dashboard/dashboard_page.dart';
-import 'package:wave_education/src/routes/routes.dart';
-import 'package:wave_education/src/widgets/main_header.dart';
+import 'package:wave_education/view/core/dashboard/dashboard_page.dart';
+import 'package:wave_education/view/routes/routes.dart';
+import 'package:wave_education/view/widgets/main_header.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return GetMaterialApp.router(
       debugShowCheckedModeBanner: false,
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
