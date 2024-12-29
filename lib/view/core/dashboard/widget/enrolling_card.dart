@@ -96,23 +96,39 @@ class EnrollingCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => ConfirmDialog(
-                          title: 'Delete Course',
-                          message: 'Delete this course?',
+                          title: 'Enroll Course',
+                          message: 'Do you want to enroll in this course?',
                           onConfirm: () async {
+                            // Proses enroll course
                             final userController = Get.put(UserController());
                             final response = await userController
                                 .enrollCourse(courseId ?? 0);
 
                             if (response.statusCode == 200) {
-                              print("succss");
-                              Navigator.pop(context);
+                              // Berhasil, tampilkan snackbar dan refresh
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Enrollment successful!")),
+                              );
+                              Navigator.pop(context); // Tutup dialog
+                              // Lakukan refresh halaman
+                              if (context.mounted) {
+                                context.goNamed('dashboard');
+                              }
                             } else {
-                              print("failed");
-                              Navigator.pop(context);
+                              // Gagal, tampilkan pesan error
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Enrollment failed: ${response.body}"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              Navigator.pop(context); // Tutup dialog
                             }
                           },
                           onCancel: () {
-                            // Handle no
+                            // Handle cancel
                             Navigator.pop(context);
                           },
                         ),

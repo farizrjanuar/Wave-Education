@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wave_education/controller/CourseController.dart';
 import 'package:wave_education/controller/UserController.dart';
 import 'package:wave_education/data/dummyCourse.dart';
@@ -22,6 +23,7 @@ class DashboardPage extends StatelessWidget {
     final userController = Get.put(UserController());
     final courseController = Get.put(CourseController());
     courseController.getAllCourse();
+    userController.getUserById();
 
     // print(courseController.course.value);
     return Scaffold(
