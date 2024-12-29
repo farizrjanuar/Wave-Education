@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wave_education/model/User.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,20 +9,29 @@ import 'package:get/get.dart'; // Import GetX
 class UserController extends GetxController {
   Rx<User?> user = Rx<User?>(null);
   Rx<List?> enrolledCourses = Rx<List?>(null);
+  Rx<Object?> enrolledObject = Rx<Object?>(null);
 
   // Menyimpan status loading
   RxBool isLoading = false.obs;
 
   Future<void> getUserById() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString('uid') ?? '';
+    String token = prefs.getString('userToken') ?? '';
     try {
       isLoading.value = true; // Menandakan data sedang diambil
-      final response =
-          await http.get(Uri.parse('http://192.168.56.1:8080/api/users/1'));
+      final response = await http.get(
+          Uri.parse('http://192.168.56.1:8080/api/users/${uid}'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${token}'
+          });
 
       // Mengecek apakah response berhasil (status code 200)
-      if (response.statusCode == 200) {
+      if (response.statusCode == 302) {
         // Jika berhasil, konversikan data JSON menjadi objek User
         Map<String, dynamic> data = jsonDecode(response.body);
+        print("data : $data");
         user.value = User.fromJson(data); // Simpan user yang berhasil diambil
       } else {
         // Jika gagal, tampilkan pesan kesalahan
@@ -37,18 +47,24 @@ class UserController extends GetxController {
   // DESCRIPTION : Mendapatkan Course yang telah di Enroll oleh User
   Future<void> getUserEnrolledCoursesById(int userId) async {
     final userController = Get.put(UserController());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('userToken') ?? '';
+    String uid = prefs.getString('uid') ?? '';
+    print("uid : $uid");
     try {
       // Menandakan data sedang diambil
       final response = await http.get(
           Uri.parse(
-            "http://192.168.56.1:8080/api/users/${userController.user.value?.userID}/courses",
+            "http://192.168.56.1:8080/api/users/${uid}/courses",
           ),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${userController.user.value?.token}'
+            'Authorization': 'Bearer ${token}'
           });
       if (response.statusCode == 302) {
         List<dynamic> data = jsonDecode(response.body);
+        Object enrolled = jsonDecode(response.body);
+        enrolledObject.value = enrolled;
         enrolledCourses.value = data;
       } else {
         // Jika gagal, tampilkan pesan kesalahan
@@ -65,16 +81,15 @@ class UserController extends GetxController {
 
   Future<http.Response> enrollCourse(int courseId) async {
     final userController = Get.put(UserController());
-
-    print(
-        "ini id user ${userController.user.value?.userID} dan ini id course ${courseId}");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('userToken') ?? '';
+    // print("object : ${userController.user.value?.name}");
     try {
       final response = await http.post(
         Uri.parse('http://192.168.56.1:8080/api/users/enroll'),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization':
-              'Bearer ${userController.user.value?.token}' // Menambahkan token ke header
+          'Authorization': 'Bearer ${token}' // Menambahkan token ke header
         },
         body: jsonEncode({
           'courseId': courseId,
@@ -104,7 +119,7 @@ class UserController extends GetxController {
         return false;
       }
 
-      // if (!GetUtils.isEmail(email)) {
+      // if (!GetUtils.isEmail(email)) {userController
       //   print("error?");
       //   errorMessage.value = 'Please enter a valid email';
       //   return false;
@@ -125,6 +140,11 @@ class UserController extends GetxController {
         user.value?.token = data['accessToken'];
         // Assuming your API returns user data
         // await getUserById(); // Get complete user data
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userToken', data['accessToken']);
+        await prefs.setString('uid', user.value!.userID.toString());
+
         return true;
       } else {
         print("halo");
@@ -156,5 +176,12 @@ class UserController extends GetxController {
     } catch (e) {
       throw Exception('Failed to create user: $e');
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userToken');
+    user.value = null; // Reset user
+    // Kembali ke halaman login
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wave_education/controller/UserController.dart';
+import 'package:wave_education/view/core/auth/login_page/widget/form_auth_signup.dart';
+import 'package:wave_education/view/core/auth/signup/widget/form_auth_signup.dart';
 import 'package:wave_education/view/widgets/form_attribute.dart';
 import 'package:wave_education/view/widgets/main_footer.dart';
 import 'package:wave_education/view/widgets/main_header.dart';
@@ -120,13 +123,18 @@ class ProfilePage extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xffF9BFCE),
+                                backgroundColor:
+                                    const Color.fromARGB(255, 255, 0, 0),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 )),
-                            onPressed: () {},
+                            onPressed: () {
+                              final userController = Get.put(UserController());
+                              userController.logout();
+                              context.goNamed("login");
+                            },
                             child: const Text(
-                              "Edit",
+                              "Sign Out",
                             ),
                           ),
                         ),
