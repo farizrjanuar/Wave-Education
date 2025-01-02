@@ -1,19 +1,23 @@
 // Class Course
 // import 'package:wave_education/model/Modules.dart';
 
+import 'package:wave_education/model/Modules.dart';
+
 class Course {
   int courseID;
   String title;
   String description;
+  int? pointEarned;
   // double progress;
-  // List<Modules> modules;
+  List<Modules>? modules = [];
 
   Course({
     required this.courseID,
     required this.title,
     required this.description,
     // required this.progress,
-    // required this.modules,
+    this.pointEarned,
+    this.modules,
   });
 
   // from json
@@ -23,9 +27,7 @@ class Course {
       courseID: json['courseId'],
       title: json['title'],
       description: json['description'],
-      // progress: json[''],
-      // modules: List<Modules>.from(
-      //     json['modulesDTO'].map((module) => Modules.fromJson(module))),
+      modules: json['modules'],
     );
   }
 

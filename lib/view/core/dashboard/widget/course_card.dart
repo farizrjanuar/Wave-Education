@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:wave_education/model/CourseModel.dart';
 
+// ignore: must_be_immutable
 class CoursesCard extends StatelessWidget {
-  String? courseName;
-  String? courseDesc;
+  Course? course;
+  int? coursePathId;
 
   CoursesCard({
-    this.courseDesc,
-    this.courseName,
+    required this.course,
+    required this.coursePathId,
     super.key,
   });
 
@@ -17,7 +19,8 @@ class CoursesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed("DBCourse", pathParameters: {"courseName": "22"});
+        context.goNamed("DBCourse",
+            pathParameters: {"coursePathId": coursePathId.toString()});
       },
       child: Container(
         decoration: BoxDecoration(
@@ -52,7 +55,7 @@ class CoursesCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                courseName ?? "null",
+                course?.title ?? "null",
                 style: GoogleFonts.poppins(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -60,7 +63,7 @@ class CoursesCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                courseDesc ?? "null",
+                course?.description ?? "null",
                 style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
               ),
               const SizedBox(height: 10),
@@ -77,7 +80,7 @@ class CoursesCard extends StatelessWidget {
                               "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"),
                           fit: BoxFit.cover),
                     )),
-                title: Text("Ghefin", style: GoogleFonts.poppins(fontSize: 12)),
+                title: Text("Admin", style: GoogleFonts.poppins(fontSize: 12)),
               ),
               const SizedBox(height: 10),
               LinearProgressIndicator(

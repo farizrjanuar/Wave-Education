@@ -1,17 +1,11 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wave_education/controller/CourseController.dart';
 import 'package:wave_education/controller/UserController.dart';
-import 'package:wave_education/data/dummyCourse.dart';
-import 'package:wave_education/model/CourseModel.dart';
-import 'package:wave_education/model/User.dart';
 import 'package:wave_education/view/core/dashboard/widget/course_card.dart';
 import 'package:wave_education/view/core/dashboard/widget/enrolling_card.dart';
-import 'package:wave_education/view/core/dashboard/widget/get_course_card.dart';
 import 'package:wave_education/view/widgets/main_footer.dart';
 import 'package:wave_education/view/widgets/main_header.dart';
 
@@ -52,13 +46,12 @@ class DashboardPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${userController.user.value?.name} + ${"HALOOOO ${courseController.course.value?.length}"}",
+                                    "Hello, ${userController.user.value?.name}",
                                     style: GoogleFonts.poppins(
                                         fontSize: 30,
                                         fontWeight: FontWeight.w700),
                                   ),
                                   const SizedBox(height: 50),
-                                  // const SizedBox(height: 5),
                                   const SectionEnrolledCourse(),
                                   const SizedBox(height: 50),
                                   const SectionEnrollCourse(),
@@ -102,11 +95,11 @@ class SectionEnrollCourse extends StatelessWidget {
               crossAxisSpacing: 10, // Jarak antar kolom
               mainAxisSpacing: 10, // Jarak antar baris
             ),
-            itemCount: courseController.course.value?.length ??
+            itemCount: courseController.courseList.value?.length ??
                 0, // Jumlah total item yang akan ditampilkan
             itemBuilder: (BuildContext context, int index) {
-              final course = courseController
-                  .course.value?[index]; // Mengakses elemen berdasarkan index
+              final course = courseController.courseList
+                  .value?[index]; // Mengakses elemen berdasarkan index
               if (course == null) {
                 return const SizedBox
                     .shrink(); // Jika null, tampilkan widget kosong
@@ -132,43 +125,33 @@ class SectionEnrolledCourse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userController = Get.put(UserController());
-    userController.getUserEnrolledCoursesById(1);
-    // print("kesini ${userController.enrolledCourses.value!.length}");
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "My Courses",
-            style:
-                GoogleFonts.poppins(fontSize: 30, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 50),
-          GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, // Jumlah kolom dalam grid
-              crossAxisSpacing: 10, // Jarak antar kolom
-              mainAxisSpacing: 10, // Jarak antar baris
-            ),
-            itemCount: userController.enrolledCourses.value?.length ?? 0,
-            // Jumlah total item yang akan ditampilkan
-            itemBuilder: (BuildContext context, int index) {
-              final course = userController.enrolledCourses.value?[index];
-              final courseDetail = course['courseDTO'];
-              if (course == null) {
-                return const SizedBox
-                    .shrink(); // Jika null, tampilkan widget kosong
-              }
+    userController.getUserEnrolledCoursesById();
 
-              return CoursesCard(
-                courseName: courseDetail['title'],
-                courseDesc: courseDetail['description'],
-              );
-            },
-          )
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "My Courses",
+          style: GoogleFonts.poppins(fontSize: 30, fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 50),
+        GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, // Jumlah kolom dalam grid
+            crossAxisSpacing: 10, // Jarak antar kolom
+            mainAxisSpacing: 10, // Jarak antar baris
+          ),
+          itemCount: userController.user.value?.courseEnrolled?.length ?? 0,
+          // Jumlah total item yang akan ditampilkan
+          itemBuilder: (BuildContext context, int index) {
+            return CoursesCard(
+              course: userController.user.value?.courseEnrolled?[index],
+              coursePathId: index,
+            );
+          },
+        )
+      ],
     );
   }
 }

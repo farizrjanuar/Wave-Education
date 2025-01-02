@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wave_education/controller/UserController.dart';
 import 'package:wave_education/view/widgets/form_attribute.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wave_education/view/widgets/information_dialog.dart';
 
 class FormAuthSignIn extends StatelessWidget {
   const FormAuthSignIn({
@@ -18,8 +19,7 @@ class FormAuthSignIn extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     final userController = Get.put(UserController());
-    return SizedBox(
-      height: heightScreen * 0.6,
+    return Container(
       width: 300,
       child: Center(
         child: Container(
@@ -31,6 +31,8 @@ class FormAuthSignIn extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
             child: Column(
+              mainAxisSize: MainAxisSize.min, // Membuat tinggi sesuai konten
+
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -90,10 +92,20 @@ class FormAuthSignIn extends StatelessWidget {
                                 emailController.text,
                                 passwordController.text,
                               );
-                              print(success);
+
                               if (success) {
                                 context.goNamed(
                                     'dashboard'); // Navigate to dashboard
+                              } else {
+                                showDialog(
+                                  // ignore: use_build_context_synchronously
+                                  context: context,
+                                  builder: (context) => InformationDialog(
+                                    title: "Login Failed",
+                                    message:
+                                        "Please Email or password is incorrect",
+                                  ),
+                                );
                               }
                             },
                       child: userController.isLoading.value
@@ -115,6 +127,27 @@ class FormAuthSignIn extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(height: heightScreen * 0.02),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    "Don't have an account? ",
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () => context.goNamed('signup'),
+                      child: Text(
+                        "Sign Up",
+                        style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF2D59AF),
+                        ),
+                      ))
+                ])
               ],
             ),
           ),

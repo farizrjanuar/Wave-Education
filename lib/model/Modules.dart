@@ -10,10 +10,10 @@ class Modules implements Scoreable {
   String description;
   String content;
   // DateTime createdAt;
-  Quiz quiz;
+  Quiz? quiz;
 
   Modules({
-    required this.quiz,
+    this.quiz,
     required this.materiID,
     required this.title,
     required this.description,
@@ -24,11 +24,11 @@ class Modules implements Scoreable {
   // FACTORY
   factory Modules.fromJson(Map<String, dynamic> json) {
     return Modules(
-      quiz: json['quizDTO'],
       materiID: json['moduleId'],
       title: json['title'],
       description: json['description'],
       content: json['content'],
+      quiz: json['quiz'],
       // createdAt: DateTime.parse(json['createdAt']),
     );
   }

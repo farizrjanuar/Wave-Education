@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wave_education/model/CourseModel.dart';
 import 'package:wave_education/model/User.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,8 +9,7 @@ import 'package:get/get.dart'; // Import GetX
 
 class UserController extends GetxController {
   Rx<User?> user = Rx<User?>(null);
-  Rx<List?> enrolledCourses = Rx<List?>(null);
-  Rx<Object?> enrolledObject = Rx<Object?>(null);
+  // Rx<List?> enrolledCourses = Rx<List?>(null);
 
   // Menyimpan status loading
   RxBool isLoading = false.obs;
@@ -20,12 +20,11 @@ class UserController extends GetxController {
     String token = prefs.getString('userToken') ?? '';
     try {
       isLoading.value = true; // Menandakan data sedang diambil
-      final response = await http.get(
-          Uri.parse('http://192.168.56.1:8080/api/users/${uid}'),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${token}'
-          });
+      final response = await http
+          .get(Uri.parse('http://192.168.56.1:8080/api/users/$uid'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
 
       // Mengecek apakah response berhasil (status code 200)
       if (response.statusCode == 302) {
@@ -45,27 +44,34 @@ class UserController extends GetxController {
   }
 
   // DESCRIPTION : Mendapatkan Course yang telah di Enroll oleh User
-  Future<void> getUserEnrolledCoursesById(int userId) async {
+  Future<void> getUserEnrolledCoursesById() async {
     final userController = Get.put(UserController());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('userToken') ?? '';
     String uid = prefs.getString('uid') ?? '';
-    print("uid : $uid");
+
     try {
       // Menandakan data sedang diambil
       final response = await http.get(
           Uri.parse(
-            "http://192.168.56.1:8080/api/users/${uid}/courses",
+            "http://192.168.56.1:8080/api/users/$uid/courses",
           ),
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${token}'
+            'Authorization': 'Bearer $token'
           });
       if (response.statusCode == 302) {
         List<dynamic> data = jsonDecode(response.body);
-        Object enrolled = jsonDecode(response.body);
-        enrolledObject.value = enrolled;
-        enrolledCourses.value = data;
+        List<Course> courses =
+            data.map((data) => Course.fromJson(data['courseDTO'])).toList();
+
+        if (courses.length == data.length) {
+          for (int i = 0; i < courses.length; i++) {
+            courses[i].pointEarned = data[i]["totalPointEarned"];
+          }
+        }
+
+        user.value?.courseEnrolled = courses;
       } else {
         // Jika gagal, tampilkan pesan kesalahan
         print(
@@ -102,10 +108,6 @@ class UserController extends GetxController {
       throw Exception('Failed to create user: $e');
     }
   }
-
-  // Method untuk menambahkan user (register user)
-
-  // Method Login User
 
   RxString errorMessage = ''.obs;
 
