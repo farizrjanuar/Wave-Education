@@ -1,31 +1,43 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wave_education/data/dummyCourse.dart';
+import 'package:wave_education/controller/ModulesController.dart';
+import 'package:wave_education/controller/UserController.dart';
+import 'package:wave_education/model/Modules.dart';
+import 'package:wave_education/view/widgets/information_dialog.dart';
 import 'package:wave_education/view/widgets/main_footer.dart';
 import 'package:wave_education/view/widgets/main_header.dart';
 import 'package:go_router/go_router.dart';
 
 class CourseDetailPage extends StatelessWidget {
-  final String courseName;
+  final String coursePathId;
   const CourseDetailPage({
-    required this.courseName,
+    required this.coursePathId,
     super.key,
   });
 
-  Future<List<dynamic>> loadModules(String courseName) {
-    final List<dynamic> courses = jsonDecode(dataJson);
-    final course =
-        courses.firstWhere((course) => course['courseName'] == courseName);
-    print(course);
-    return course['module'];
-  }
-
   @override
   Widget build(BuildContext context) {
-    // print(modules);
+    final userController = Get.put(UserController());
+    final modulesController = Get.put(ModulesController());
+    int courseId = int.parse(coursePathId) + 1;
+
+    // Safely parse courseId
+    int? parsedCourseId;
+    try {
+      parsedCourseId = int.parse(coursePathId);
+    } catch (e) {
+      print('Invalid courseId: $coursePathId');
+      return const Scaffold(
+        body: Center(child: Text('Invalid course ID')),
+      );
+    }
+
+    // Fetch modules safely
+    modulesController.getModulesOnSpecifiedCourse(parsedCourseId);
+
     double widthScreen = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
@@ -38,39 +50,55 @@ class CourseDetailPage extends StatelessWidget {
               padding: const EdgeInsets.all(50),
               child: SizedBox(
                 width: widthScreen,
-                // height: 700,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Course Artificial Intelligence",
-                      style: GoogleFonts.poppins(
-                          fontSize: 30, fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "Artificial Intelligence (AI) Overview adalah kursus pengantar yang dirancang untuk memberikan pemahaman mendasar tentang konsep, aplikasi, dan potensi AI dalam berbagai industri. Kursus ini mencakup definisi AI, sejarah perkembangan, dan teknologi terkini seperti machine learning, neural networks, serta penggunaan AI dalam kehidupan sehari-hari. Peserta akan mempelajari berbagai penerapan AI, mulai dari kendaraan otonom hingga asisten virtual, serta bagaimana teknologi ini memengaruhi masa depan pekerjaan, etika, dan masyarakat.",
-                      style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 50),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
+                child: Obx(() {
+                  final enrolledCourses =
+                      userController.user.value?.courseEnrolled;
 
-                      itemCount: 2, // Jumlah total item yang akan ditampilkan
-                      itemBuilder: (BuildContext context, int index) {
-                        // Membangun setiap item berdasarkan index
-                        return ModulesContent(
-                          courseName: courseName,
-                          modulePath: "s",
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  if (enrolledCourses == null ||
+                      parsedCourseId! >= enrolledCourses.length) {
+                    return const Center(child: Text('Course not found'));
+                  }
+                  final coursesDetail = enrolledCourses[parsedCourseId];
+                  final moduleEnrolledCourse = coursesDetail.modules;
+
+                  if (modulesController.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${coursesDetail.title} point user ${userController.user.value?.courseEnrolled?[parsedCourseId].pointEarned}",
+                          style: GoogleFonts.poppins(
+                              fontSize: 30, fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          coursesDetail.description,
+                          style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        const SizedBox(height: 50),
+                        if (moduleEnrolledCourse != null)
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: moduleEnrolledCourse.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ModulesContent(
+                                courseId: courseId,
+                                module: moduleEnrolledCourse[index],
+                                coursePathId: coursePathId,
+                                modulePathId: index.toString(),
+                              );
+                            },
+                          ),
+                      ],
+                    );
+                  }
+                }),
               ),
             ),
             const MainFooter(),
@@ -82,25 +110,53 @@ class CourseDetailPage extends StatelessWidget {
 }
 
 class ModulesContent extends StatelessWidget {
-  final String courseName;
-  final String modulePath;
+  final String coursePathId;
+  final String modulePathId;
+  final int courseId;
+  final Modules module;
+
   const ModulesContent({
-    required this.courseName,
-    required this.modulePath,
+    required this.courseId,
+    required this.module,
+    required this.coursePathId,
+    required this.modulePathId,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final moduleController = Get.put(ModulesController());
+    final userController = Get.put(UserController());
+    // userController.getUserEnrolledCoursesById();
+    // final pointCourse = userController
+    //     .user.value?.courseEnrolled?[int.parse(coursePathId)].pointEarned;
+    // print(pointCourse);
+
     return GestureDetector(
-      onTap: () {
-        context.goNamed(
-          "module",
-          pathParameters: {
-            "courseName": courseName,
-            "moduleName": modulePath,
-          },
-        );
+      onTap: () async {
+        moduleController.getModuleByIdOnSpecifiedCourse(
+            userController.user.value!.userID, courseId, module.materiID);
+
+        await Future.delayed(const Duration(seconds: 1));
+
+        if (moduleController.module.value != null) {
+          context.goNamed("module", pathParameters: {
+            'coursePathId': coursePathId,
+            'modulePathId': modulePathId
+          });
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return InformationDialog(
+                title: "Cannot open this Module",
+                message: "You aren't have enough point.",
+              );
+            },
+          );
+          moduleController.getModuleByIdOnSpecifiedCourse(
+              userController.user.value!.userID, courseId, module.materiID);
+        }
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
@@ -121,7 +177,7 @@ class ModulesContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              modulePath,
+              module.title,
               style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 30,
@@ -129,14 +185,70 @@ class ModulesContent extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Artificial Intelligence (AI) Overview adalah kursus pengantar yang dirancang untuk memberikan pemahaman mendasar tentang konsep, aplikasi, dan potensi AI dalam berbagai industri. Kursus ini mencakup definisi AI, sejarah perkembangan, dan teknologi terkini seperti machine learning, neural networks, serta penggunaan AI dalam kehidupan sehari-hari. Peserta akan mempelajari berbagai penerapan AI, mulai dari kendaraan otonom hingga asisten virtual, serta bagaimana teknologi ini memengaruhi masa depan pekerjaan, etika, dan masyarakat.",
+              module.description,
               style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.w400),
             ),
             const SizedBox(height: 20),
-            const ButtonApp()
+            // ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: Colors.amber[400],
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //       ),
+            //       shadowColor: Colors.grey,
+            //     ),
+            //     onPressed: () {
+            //       showDialog(
+            //         context: context,
+            //         builder: (context) => ConfirmDialog(
+            //           title: 'Do you want to Explore this module?',
+            //           message:
+            //               'use your point to explore this module and do quiz for other module unlocked!',
+            //           onConfirm: () async {
+
+            //             if (modulesController.module.value?.materiID != null) {
+            //               // context.goNamed(
+            //               //   "module",
+            //               //   pathParameters: {
+            //               //     "courseId": courseId,
+            //               //     "moduleId": moduleId,
+            //               //   },
+            //               // );
+            //             } else {
+            //               // showDialog(
+            //               //     context: context,
+            //               //     builder: (context) {
+            //               //       return InformationDialog(
+            //               //         title: "Oops! Failed to access this module!",
+            //               //         message:
+            //               //             "Kindly check your point to access this module.",
+            //               //       );
+            //               //     });
+            //             }
+            //           },
+            //           onCancel: () {
+            //             // Handle cancel
+            //             Navigator.pop(context);
+            //           },
+            //         ),
+            //       );
+
+            //       // context.goNamed(
+            //       //   "module",
+            //       //   pathParameters: {
+            //       //     "courseId": courseId,
+            //       //     "moduleId": moduleId,
+            //       //   },
+            //       // );
+            //     },
+            //     child: Text(
+            //       'Explore this Course',
+            //       style: GoogleFonts.poppins(color: Colors.white),
+            //     )),
+            // const ButtonApp()
           ],
         ),
       ),

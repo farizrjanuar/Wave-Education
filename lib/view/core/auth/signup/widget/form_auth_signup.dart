@@ -5,7 +5,7 @@ import 'package:wave_education/controller/UserController.dart';
 import 'package:wave_education/view/widgets/form_attribute.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:wave_education/view/widgets/information_dialog.dart';
 
 class FormAuthSignUp extends StatelessWidget {
   // TextEditingController confirmPasswordController = TextEditingController();
@@ -23,7 +23,7 @@ class FormAuthSignUp extends StatelessWidget {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     return SizedBox(
-      height: heightScreen * 0.82,
+      // height: heightScreen * 0.82,
       width: 300,
       child: Center(
         child: Container(
@@ -35,6 +35,7 @@ class FormAuthSignUp extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -109,11 +110,12 @@ class FormAuthSignUp extends StatelessWidget {
                       if (response.statusCode == 200) {
                         context.goNamed("login");
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Failed to register"),
-                          ),
-                        );
+                        showDialog(
+                            context: context,
+                            builder: (context) => InformationDialog(
+                                  title: "Sign Up Failed",
+                                  message: response.body,
+                                ));
                       }
                     },
                     child: Text(
@@ -126,6 +128,29 @@ class FormAuthSignUp extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    "Already have an account?",
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.goNamed("login");
+                    },
+                    child: Text(
+                      "Sign In",
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ]),
               ],
             ),
           ),

@@ -1,13 +1,11 @@
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wave_education/controller/UserController.dart';
-import 'package:wave_education/model/User.dart';
 import 'package:wave_education/view/core/auth/login_page/login_page.dart';
 import 'package:wave_education/view/core/auth/signup/signup_page.dart';
 import 'package:wave_education/view/core/dashboard/course/course_detail/course_detail_page.dart';
 import 'package:wave_education/view/core/dashboard/course/module_detail/module_detail_page.dart';
 import 'package:wave_education/view/core/dashboard/course/course_page.dart';
+import 'package:wave_education/view/core/dashboard/course/quiz/quiz_page.dart';
 import 'package:wave_education/view/core/dashboard/dashboard_page.dart';
 import 'package:wave_education/view/core/profile/profile_page.dart';
 
@@ -43,31 +41,55 @@ final GoRouter router = GoRouter(
           path: 'courses',
           name: 'courses',
           builder: (context, state) => const CoursePage(),
-        ),
-        GoRoute(
-          path: "courses/:courseName",
-          name: 'DBCourse',
-          builder: (context, state) {
-            final courseName =
-                state.pathParameters['courseName'] ?? 'no course';
-            return CourseDetailPage(
-              courseName: courseName,
-            );
-          },
           routes: [
             GoRoute(
-              path: "/module/:moduleName",
-              name: 'module',
+              path: ":coursePathId",
+              name: 'DBCourse',
               builder: (context, state) {
-                final courseName = Uri.decodeComponent(
-                    state.pathParameters['courseName'] ?? 'no_course');
-                final moduleName = Uri.decodeComponent(
-                    state.pathParameters['moduleName'] ?? 'no_module');
-                return ModuleDetailPage(
-                  courseName: courseName,
-                  moduleName: moduleName,
+                final coursePathId =
+                    state.pathParameters['coursePathId'] ?? "0";
+                return CourseDetailPage(
+                  coursePathId: coursePathId,
                 );
               },
+              routes: [
+                GoRoute(
+                  path: "module/:modulePathId",
+                  name: 'module',
+                  builder: (context, state) {
+                    final coursePathId = Uri.decodeComponent(
+                        state.pathParameters['coursePathId'] ?? 'no_course');
+                    final modulePathId = Uri.decodeComponent(
+                        state.pathParameters['modulePathId'] ?? 'no_module');
+                    return ModuleDetailPage(
+                      courseId: coursePathId,
+                      moduleId: modulePathId,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: "quiz/:questionPathId",
+                      name: 'quiz',
+                      builder: (context, state) {
+                        final coursePathId = Uri.decodeComponent(
+                            state.pathParameters['coursePathId'] ??
+                                'no_course');
+                        final questionPathId = Uri.decodeComponent(
+                            state.pathParameters['questionPathId'] ??
+                                '0'); // Perbaikan di sini
+                        final modulePathId = Uri.decodeComponent(
+                            state.pathParameters['modulePathId'] ??
+                                'no_module');
+                        return QuizPage(
+                          coursePathId: coursePathId,
+                          modulePathId: modulePathId,
+                          questionPathId: questionPathId,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

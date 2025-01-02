@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wave_education/view/core/auth/login_page/widget/form_auth_signup.dart';
 import 'package:wave_education/view/widgets/main_footer.dart';
 import 'package:wave_education/view/widgets/main_header.dart';
 
 class QuizPage extends StatelessWidget {
-  const QuizPage({super.key});
+  final String? questionPathId;
+  final String modulePathId;
+  final String coursePathId;
+  final String? nextQuestion;
+
+  QuizPage({
+    required this.coursePathId,
+    required this.modulePathId,
+    this.questionPathId,
+    this.nextQuestion,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // Parse current question ID, default ke 1 jika null
+    int currentQuestionId = int.tryParse(questionPathId ?? "1") ?? 1;
+
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
@@ -24,13 +40,13 @@ class QuizPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Quiz Page",
+                      "Quiz Page $currentQuestionId",
                       style: GoogleFonts.poppins(
                           fontSize: 30, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      "Question 1",
+                      "Question $currentQuestionId",
                       style: GoogleFonts.poppins(
                           color: const Color(0xFF4366DE),
                           fontSize: 20,
@@ -44,8 +60,6 @@ class QuizPage extends StatelessWidget {
                         Expanded(
                           flex: 2,
                           child: Container(
-                            // color: Colors.red,
-                            // height: MediaQuery.of(context).size.height * 0.8,
                             child: const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -64,9 +78,7 @@ class QuizPage extends StatelessWidget {
                             children: [
                               Container(
                                 width: double.infinity,
-                                // height: MediaQuery.of(context).size.height * 0.8,
                                 decoration: BoxDecoration(
-                                  // elevation
                                   boxShadow: [
                                     BoxShadow(
                                         color: Colors.grey.withOpacity(0.1),
@@ -117,11 +129,31 @@ class QuizPage extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    ButtonQuiz(
-                                      text: "Previous",
-                                    ),
-                                    ButtonQuiz(
-                                      text: "Next",
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Navigasi ke pertanyaan berikutnya
+                                        String nextQuestion =
+                                            (currentQuestionId + 1).toString();
+
+                                        context
+                                            .goNamed("quiz", pathParameters: {
+                                          "questionPathId": nextQuestion,
+                                          "modulePathId": modulePathId,
+                                          "coursePathId": coursePathId
+                                        });
+                                      },
+                                      child: Text("Next"),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 30, vertical: 20),
+                                        backgroundColor:
+                                            const Color(0xFFDFE9FF),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        shadowColor: Colors.grey,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -144,8 +176,14 @@ class QuizPage extends StatelessWidget {
 }
 
 class ButtonQuiz extends StatelessWidget {
+  final String questionPathId;
+  final String modulePathId;
+  final String coursePathId;
   final String text;
   const ButtonQuiz({
+    required this.questionPathId,
+    required this.modulePathId,
+    required this.coursePathId,
     required this.text,
     super.key,
   });
@@ -153,7 +191,13 @@ class ButtonQuiz extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        context.goNamed("quiz", pathParameters: {
+          "questionPathId": "${int.parse(questionPathId) + 1}",
+          "modulePathId": modulePathId,
+          "coursePathId": coursePathId
+        });
+      },
       child: Text(text),
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
