@@ -36,13 +36,9 @@ class Quizcontroller extends GetxController {
         print(
             'Quiz loaded with ${quiz.value?.question?.length ?? 0} questions');
         print('Questions: ${quiz.value?.question}');
-
-        // print(quiz.value?.question);
       }
     } catch (e) {
       print('Error: $e');
     }
   }
-
-  // Future<void> submitQuiz() {}
 }
